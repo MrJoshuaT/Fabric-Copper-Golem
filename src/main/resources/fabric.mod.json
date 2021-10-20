@@ -1,0 +1,41 @@
+{
+  "schemaVersion": 1,
+  "id": "fabric-copper-golem",
+  "version": "${version}",
+
+  "name": "Copper Golem",
+  "description": "Fabric mod to add Copper Golems. Because they are so cute. Functionality is experimental and is based on what Mojang announced at Minecraft Live 2021",
+  "authors": [
+    "MrJoshuaT"
+  ],
+  "contact": {
+    "homepage": "https://www.planetminecraft.com/mod/copper-golem-for-fabric/",
+    "sources": "https://github.com/MrJoshuaT/Fabric-Copper-Golem"
+  },
+
+  "license": "LGPL-3.0-only",
+  "icon": "assets/fabriccoppergolem/icon.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "com.mrjoshuat.coppergolem.ModInit"
+    ],
+    "client": [
+      "com.mrjoshuat.coppergolem.ClientMod"
+    ]
+  },
+  "mixins": [
+    "fabriccoppergolem.mixins.json"
+  ],
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.17.x",
+    "java": ">=16"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}
