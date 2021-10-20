@@ -7,6 +7,8 @@ But this little golem is so cute I did not want to see it in Minecraft!
 
 ### Requires at least Fabric API 0.41.0
 
+<img src="./images/main_screenshot.png"/>
+
 ## Features
 
 ### Spawning
