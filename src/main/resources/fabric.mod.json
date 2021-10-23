@@ -14,7 +14,7 @@
   },
 
   "license": "LGPL-3.0-only",
-  "icon": "assets/fabriccoppergolem/icon.png",
+  "icon": "assets/fabric-copper-golem/icon.png",
 
   "environment": "*",
   "entrypoints": {

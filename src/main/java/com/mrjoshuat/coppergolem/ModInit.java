@@ -7,6 +7,9 @@ import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.SpawnEggItem;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import org.apache.logging.log4j.LogManager;
@@ -22,8 +25,12 @@ public class ModInit implements ModInitializer {
 					.dimensions(EntityDimensions.fixed(0.75f, 1f)).build()
 	);
 
+	public static final Item IRON_GOLEM_SPAWN_EGG = new SpawnEggItem(COPPER_GOLEM_ENTITY_TYPE,
+			13136982, 	5805694, new Item.Settings().group(ItemGroup.MISC));
+
 	@Override
 	public void onInitialize() {
 		FabricDefaultAttributeRegistry.register(COPPER_GOLEM_ENTITY_TYPE, CopperGolemEntity.createMobAttributes());
+		Registry.register(Registry.ITEM, new Identifier("minecraft", "copper_golem_spawn_egg"), IRON_GOLEM_SPAWN_EGG);
 	}
 }

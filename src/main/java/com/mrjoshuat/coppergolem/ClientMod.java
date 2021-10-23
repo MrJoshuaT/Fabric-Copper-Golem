@@ -13,7 +13,7 @@ import net.minecraft.util.Identifier;
 
 public class ClientMod implements ClientModInitializer {
     public static final String ID = "fabric-copper-golem";
-    public static final EntityModelLayer MODEL_CUBE_LAYER = new EntityModelLayer(new Identifier("minecraft", "copper_golem"), "copper_golem");
+    public static final EntityModelLayer MODEL_GOLEM_LAYER = new EntityModelLayer(new Identifier("minecraft", "copper_golem"), "copper_golem");
 
     @Override
     public void onInitializeClient() {
@@ -23,15 +23,14 @@ public class ClientMod implements ClientModInitializer {
 
     private void registerCopperGolem() {
         EntityRendererRegistry.register(ModInit.COPPER_GOLEM_ENTITY_TYPE, (context) -> new CopperGolemRenderer(context,
-            new CopperGolemModel(context.getPart(ClientMod.MODEL_CUBE_LAYER)),
-            0.5f));
+            new CopperGolemModel(context.getPart(ClientMod.MODEL_GOLEM_LAYER)), 0.5f));
 
-        EntityModelLayerRegistry.registerModelLayer(MODEL_CUBE_LAYER, CopperGolemModel::getTexturedModelData);
+        EntityModelLayerRegistry.registerModelLayer(MODEL_GOLEM_LAYER, CopperGolemModel::getTexturedModelData);
     }
 
     private void registerResourcePack() {
         FabricLoader.getInstance().getModContainer(ID).ifPresent(container -> {
-            var added = ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(ID, "copper_golem"), container, ResourcePackActivationType.DEFAULT_ENABLED);
+            var added = ResourceManagerHelper.registerBuiltinResourcePack(new Identifier(ID, "copper_golem"), container, ResourcePackActivationType.ALWAYS_ENABLED);
             if (!added) {
                 ModInit.LOGGER.error("Failed to add default 'copper_golem' resource pack!");
             }

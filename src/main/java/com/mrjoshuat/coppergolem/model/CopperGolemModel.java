@@ -1,6 +1,5 @@
 package com.mrjoshuat.coppergolem.model;
 
-import com.mrjoshuat.coppergolem.ModInit;
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
 import net.fabricmc.api.EnvType;
@@ -20,6 +19,8 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
     private final ModelPart leftArm;
     private final ModelPart rightArm;
 
+    private float lastAnimationProcess = 0;
+
     public CopperGolemModel(ModelPart modelPart) {
         root = modelPart;
 
@@ -32,16 +33,39 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
 
     @Override
     public void setAngles(CopperGolemEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
-        this.head.yaw = headYaw * 0.017453292F;
+        // Generic angels
+        //this.head.yaw = headYaw * 0.017453292F;
 		this.head.pitch = headPitch * 0.005453292F;
 		this.rightLeg.pitch = -1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
 		this.leftLeg.pitch = 1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
 		this.rightLeg.yaw = 0.0F;
 		this.leftLeg.yaw = 0.0F;
 
-        // TODO: this should be in the Renderer not here
+        // Head spinning
+        var process = entity.getHeadSpinProgress();
+        if (process <= 0) {
+            this.head.yaw = headYaw * 0.017453292F;
+        } else {
+            float l = (0.5F + process) * 3.1415927F;
+            float m = -1.0F + MathHelper.sin(l);
+            this.head.yaw = m * m * m * m * 3.1415927F * 0.125F;
+        }
+
         this.leftArm.pitch = -1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
         this.rightArm.pitch = 1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
+
+        // Arm moving
+        var i = entity.getButtonTicksLeft();
+        if (i > 0) {
+            var tickDelta = animationProgress - this.lastAnimationProcess;
+            this.rightArm.pitch = -2.0F + 1.5F * MathHelper.wrap((float)i - tickDelta, 10.0F);
+            this.leftArm.pitch = -2.0F + 1.5F * MathHelper.wrap((float)i - tickDelta, 10.0F);
+        }
+        this.lastAnimationProcess = animationProgress;
+    }
+
+    @Override
+    public void animateModel(T entity, float limbAngle, float limbDistance, float tickDelta) {
     }
 
     @Override
