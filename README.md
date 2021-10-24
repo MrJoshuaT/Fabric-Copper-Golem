@@ -13,6 +13,7 @@ But this little golem is so cute I did not want to see it in Minecraft!
 
 ### Spawning
 * The spawning combo is a bottom __Copper Block__, middle __Carved Pumpkin__ Block and top __Lightning Rod__.
+* In creative, you can use the Copper Golem spawn egg
 
 ### Goals, in priority order
 * Wandering around, this is taken straight from the Iron Golem code
@@ -29,6 +30,11 @@ But this little golem is so cute I did not want to see it in Minecraft!
 * Interacting with the mob with an any Axe will unwax it, if waxed, otherwise if not at first oxidation level will deoxidise it by 1 level
 * Lightning strikes will set oxidation level to 0 (min level)
 
+## Animation
+* Spinning head randomly
+* Arm/body moving when pressing button
+* Rod wiggling randomly
+
 ## Current to do list
 ## Block / Entity
 * Add copper buttons, and their oxidise variants
@@ -36,19 +42,6 @@ But this little golem is so cute I did not want to see it in Minecraft!
 ### Misc
 * Server support
 * Hitbox is a not great, should be smaller on X,Z and bigger on Y?
-* ✅ Texture on stage 1 and 2 need adjusting
-* ✅ Spawn egg
-* ✅ Remove feature renderer and add texture selection to renderer
-* ✅ Force enable the texture pack
-* ✅ Interacting with a Copper Ingot should heal the golem
-
-### Animation
-* Arm/body when pressing buttons
-* ✅ Spinning head
-
-### Goals
-* ✅ Separate goal and target selectors
-* ✅ Add spinning head goal for random head spins
 
 ### Mod / Cloth menu
 * Option to select all/specific buttons to press

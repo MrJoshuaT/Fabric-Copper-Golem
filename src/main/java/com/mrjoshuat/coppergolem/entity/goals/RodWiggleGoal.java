@@ -1,12 +1,13 @@
 package com.mrjoshuat.coppergolem.entity.goals;
 
+import com.mrjoshuat.coppergolem.ModInit;
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 import net.minecraft.entity.ai.goal.Goal;
 
-public class SpinHeadGoal extends Goal {
+public class RodWiggleGoal extends Goal {
     private CopperGolemEntity entity;
 
-    public SpinHeadGoal(CopperGolemEntity entity) {
+    public RodWiggleGoal(CopperGolemEntity entity) {
         this.entity = entity;
     }
 
@@ -19,16 +20,16 @@ public class SpinHeadGoal extends Goal {
 
     @Override
     public boolean shouldContinue() {
-        return this.entity.getLastHeadSpinTicks() > 0;
+        return this.entity.getLastRodWiggleTicks() > 0;
     }
 
     @Override
     public void tick() {
-        var ticks  = this.entity.getLastHeadSpinTicks();
+        var ticks  = this.entity.getLastRodWiggleTicks();
         if (ticks > 0) {
-            this.entity.setLastButtonPressTicks(ticks--);
+            this.entity.setLastRodWiggleTicksTicks(ticks--);
         } else {
-            this.entity.setLastButtonPressTicks(100);
+            this.entity.setLastRodWiggleTicksTicks(20);
         }
     }
 }

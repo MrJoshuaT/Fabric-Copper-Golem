@@ -3,6 +3,7 @@ package com.mrjoshuat.coppergolem.entity;
 import com.google.common.collect.ImmutableList;
 import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
 import com.mrjoshuat.coppergolem.entity.goals.PressButtonGoal;
+import com.mrjoshuat.coppergolem.entity.goals.RodWiggleGoal;
 import com.mrjoshuat.coppergolem.entity.goals.SpinHeadGoal;
 import com.mrjoshuat.coppergolem.entity.target.SearchForButtonsGoal;
 import net.minecraft.entity.EntityType;
@@ -36,6 +37,8 @@ import java.util.*;
 import java.util.stream.Stream;
 
 public class CopperGolemEntity extends GolemEntity {
+    protected static final TrackedData<Float> LAST_ROD_WIGGLE_TICKS;
+    protected static final TrackedData<Float> SHOULD_BEND_OVER;
     protected static final TrackedData<Integer> OXIDIZATION_LEVEL;
     protected static final TrackedData<Integer> LAST_HEAD_SPIN_TICKS;
     protected static final TrackedData<Float> LAST_BUTTON_PRESS_TICKS;
@@ -52,9 +55,11 @@ public class CopperGolemEntity extends GolemEntity {
     private float buttonTicksLeft = 0;
 
     static {
+        SHOULD_BEND_OVER = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
         OXIDIZATION_LEVEL = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.INTEGER);
         LAST_HEAD_SPIN_TICKS = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.INTEGER);
         LAST_BUTTON_PRESS_TICKS = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
+        LAST_ROD_WIGGLE_TICKS = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
         IS_WAXED = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
         ALL_AXES = Arrays.asList(new Item[] {
                 Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.STONE_AXE, Items.WOODEN_AXE
@@ -82,6 +87,7 @@ public class CopperGolemEntity extends GolemEntity {
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, IronGolemEntity.class, 10.0F));
         this.goalSelector.add(++priority, new PressButtonGoal(this));
+        this.goalSelector.add(++priority, new RodWiggleGoal(this));
 
         this.targetSelector.add(1, new SearchForButtonsGoal(this));
     }
@@ -89,16 +95,19 @@ public class CopperGolemEntity extends GolemEntity {
     @Override
     public void onStruckByLightning(ServerWorld world, LightningEntity lightning) {
         super.onStruckByLightning(world, lightning);
-        // TODO: this logic should be adjusted?
-        this.setOxidisationLevel(MIN_LEVEL);
+        if (!this.getWaxed()) {
+            this.setOxidisationLevel(MIN_LEVEL);
+        }
     }
 
     @Override
     protected void initDataTracker() {
         super.initDataTracker();
 
+        this.dataTracker.startTracking(SHOULD_BEND_OVER, 0F);
         this.dataTracker.startTracking(OXIDIZATION_LEVEL, MIN_LEVEL);
         this.dataTracker.startTracking(LAST_BUTTON_PRESS_TICKS, 0F);
+        this.dataTracker.startTracking(LAST_ROD_WIGGLE_TICKS, 0F);
         this.dataTracker.startTracking(LAST_HEAD_SPIN_TICKS, 0);
         this.dataTracker.startTracking(IS_WAXED, false);
     }
@@ -106,30 +115,43 @@ public class CopperGolemEntity extends GolemEntity {
     public void tickMovement() {
         super.tickMovement();
 
-        var spinHeadTicks = this.dataTracker.get(LAST_HEAD_SPIN_TICKS);
+        var spinHeadTicks = this.getLastHeadSpinTicks();
         if (spinHeadTicks > 0)
             this.dataTracker.set(LAST_HEAD_SPIN_TICKS, --spinHeadTicks);
 
-        var buttonTicksLeft = this.dataTracker.get(LAST_BUTTON_PRESS_TICKS);
-        if (buttonTicksLeft > 0)
+        var buttonTicksLeft = this.getButtonTicksLeft();
+        if (buttonTicksLeft > 0) {
             this.dataTracker.set(LAST_BUTTON_PRESS_TICKS, --buttonTicksLeft);
+        }
+        if (buttonTicksLeft == 0) {
+            var bendOverTicks = this.getBendOverTicks();
+            if (bendOverTicks != 0) {
+                if (bendOverTicks > 0) {
+                    this.setBendOverTicks(--bendOverTicks);
+                } else if (bendOverTicks < 0) {
+                    this.setBendOverTicks(++bendOverTicks);
+                }
+            }
+        }
 
         this.tickHeadSpin();
         this.tickOxidisationAI();
+    }
+
+    private void tickHeadSpin() {
+        var ticks = (float)this.getLastHeadSpinTicks();
+        if (ticks <= 0)
+            return;
+        this.headSpinProgress = (ticks * 0.01F) - 0.05F;
     }
 
     protected void tickOxidisationAI() {
         var oxidisation = getOxidisation();
         if (oxidisation == Oxidisation.OXIDIZED && !this.isAiDisabled()) {
             this.setAiDisabled(true);
+            this.clearGoalsAndTasks();
         } else if (oxidisation != Oxidisation.OXIDIZED && this.isAiDisabled()) {
             this.setAiDisabled(false);
-        }
-    }
-
-    protected void tickDegradation() {
-        if (this.random.nextFloat() < 0.01f) {
-            this.incrementOxidisation();
         }
     }
 
@@ -142,6 +164,12 @@ public class CopperGolemEntity extends GolemEntity {
             this.tickDegradation();
             return ActionResult.PASS;
         });
+    }
+
+    protected void tickDegradation() {
+        if (this.random.nextFloat() < 0.005f) {
+            this.incrementOxidisation();
+        }
     }
 
     public void incrementOxidisation() {
@@ -270,29 +298,23 @@ public class CopperGolemEntity extends GolemEntity {
 
     protected void setWaxed(boolean waxed) { this.dataTracker.set(IS_WAXED, waxed); }
 
+    public void setLastButtonPressTicks(int ticks) { this.dataTracker.set(LAST_HEAD_SPIN_TICKS, ticks); }
 
-    public void setLastButtonPressTicks(int ticks) {
-        this.dataTracker.set(LAST_HEAD_SPIN_TICKS, ticks);
-    }
+    public int getLastHeadSpinTicks() { return this.dataTracker.get(LAST_HEAD_SPIN_TICKS); }
 
-    public int getLastHeadSpinTicks() {
-        return this.dataTracker.get(LAST_HEAD_SPIN_TICKS);
-    }
-
-    private void tickHeadSpin() {
-        var ticks = (float)this.getLastHeadSpinTicks();
-        if (ticks <= 0)
-            return;
-        this.headSpinProgress = (ticks * 0.01F) - 0.05F;
-    }
-
-    public float getHeadSpinProgress() {
-        return this.headSpinProgress; //MathHelper.lerp(delta, this.prevHeadSpinProgress, this.headSpinProgress);
-    }
+    public float getHeadSpinProgress() { return this.headSpinProgress; }
 
     public void setButtonTicksLeft(float ticks) { this.dataTracker.set(LAST_BUTTON_PRESS_TICKS, ticks); }
 
     public float getButtonTicksLeft() { return this.dataTracker.get(LAST_BUTTON_PRESS_TICKS); }
+
+    public void setBendOverTicks(float ticks) { this.dataTracker.set(SHOULD_BEND_OVER, ticks); }
+
+    public float getBendOverTicks() { return this.dataTracker.get(SHOULD_BEND_OVER); }
+
+    public void setLastRodWiggleTicksTicks(float ticks) { this.dataTracker.set(LAST_ROD_WIGGLE_TICKS, ticks); }
+
+    public float getLastRodWiggleTicks() { return this.dataTracker.get(LAST_ROD_WIGGLE_TICKS); }
 
     public enum Oxidisation {
         UNAFFECTED(0),
