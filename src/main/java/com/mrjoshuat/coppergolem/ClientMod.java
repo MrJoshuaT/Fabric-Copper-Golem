@@ -1,13 +1,15 @@
 package com.mrjoshuat.coppergolem;
 
 import com.mrjoshuat.coppergolem.model.CopperGolemModel;
-import net.fabricmc.api.ClientModInitializer;
 import com.mrjoshuat.coppergolem.renderer.CopperGolemRenderer;
+
+import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityModelLayerRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.EntityRendererRegistry;
 import net.fabricmc.fabric.api.resource.ResourceManagerHelper;
 import net.fabricmc.fabric.api.resource.ResourcePackActivationType;
 import net.fabricmc.loader.api.FabricLoader;
+
 import net.minecraft.client.render.entity.model.EntityModelLayer;
 import net.minecraft.util.Identifier;
 

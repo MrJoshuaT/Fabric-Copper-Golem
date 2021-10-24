@@ -1,6 +1,7 @@
 package com.mrjoshuat.coppergolem.entity.goals;
 
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
+
 import net.minecraft.entity.ai.goal.Goal;
 
 public class SpinHeadGoal extends Goal {

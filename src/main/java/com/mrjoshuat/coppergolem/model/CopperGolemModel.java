@@ -4,6 +4,7 @@ import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+
 import net.minecraft.client.model.*;
 import net.minecraft.client.render.entity.model.EntityModelPartNames;
 import net.minecraft.client.render.entity.model.SinglePartEntityModel;
@@ -35,7 +36,6 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
         this.rod = this.head.getChild("Lightning_rod_pole");
     }
 
-    private boolean isWigglingRod = false;
     @Override
     public void setAngles(CopperGolemEntity entity, float limbAngle, float limbDistance, float animationProgress, float headYaw, float headPitch) {
         // Generic angles

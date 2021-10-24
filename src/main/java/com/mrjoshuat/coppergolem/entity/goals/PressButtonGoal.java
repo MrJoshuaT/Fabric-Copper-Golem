@@ -2,6 +2,7 @@ package com.mrjoshuat.coppergolem.entity.goals;
 
 import com.mrjoshuat.coppergolem.ModInit;
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
+
 import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
@@ -9,7 +10,6 @@ import net.minecraft.block.enums.WallMountLocation;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
 public class PressButtonGoal extends Goal {
     private final CopperGolemEntity entity;

@@ -6,6 +6,7 @@ import com.mrjoshuat.coppergolem.entity.goals.PressButtonGoal;
 import com.mrjoshuat.coppergolem.entity.goals.RodWiggleGoal;
 import com.mrjoshuat.coppergolem.entity.goals.SpinHeadGoal;
 import com.mrjoshuat.coppergolem.entity.target.SearchForButtonsGoal;
+
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LightningEntity;
@@ -31,6 +32,7 @@ import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
