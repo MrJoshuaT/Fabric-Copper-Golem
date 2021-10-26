@@ -1,13 +1,22 @@
 # Copper Golem for Fabric 🤖
 Sadly at __Minecraft Live 2021__ the Copper Golem did not win the vote to get added into 1.18.
 
-But this little golem is so cute I did not want to see it in Minecraft!
+But this little golem is so cute I did not want to see it get missed in Minecraft!
 
 > Functionality is experimental and is based on what Mojang announced at Minecraft Live 2021.
 
 ### Requires at least Fabric API 0.41.0
 
 <img src="./images/main_screenshot.png"/>
+
+## To run the mod
+### Single player
+You can run this mod on a single player world by just having it in your mods folder.
+
+### Multiplayer
+The server must have the mod installed.
+
+Clients need to have the mod installed to see the golems. If they do not have the mod the game seems to render a Pig for me 🤷‍♂️.
 
 ## Features
 
@@ -36,12 +45,11 @@ But this little golem is so cute I did not want to see it in Minecraft!
 * Rod wiggling randomly
 
 ## Current to do list
-## Block / Entity
+### Block / Entity
 * Add copper buttons, and their oxidise variants
 
 ### Misc
-* Server support
-* Hitbox is a not great, should be smaller on X,Z and bigger on Y?
+* Freezing limbs in place once at last stage of oxidation
 
 ### Mod / Cloth menu
 * Option to select all/specific buttons to press
