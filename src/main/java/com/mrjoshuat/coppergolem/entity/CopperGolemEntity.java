@@ -154,6 +154,7 @@ public class CopperGolemEntity extends GolemEntity {
             this.clearGoalsAndTasks();
         } else if (oxidisation != Oxidisation.OXIDIZED && this.isAiDisabled()) {
             this.setAiDisabled(false);
+            this.initGoals();
         }
     }
 
@@ -324,7 +325,7 @@ public class CopperGolemEntity extends GolemEntity {
         WEATHERED(2),
         OXIDIZED(3);
 
-        private static final List<IronGolemEntity.Crack> VALUES = (List) Stream.of(values()).sorted(Comparator.comparingDouble((oxidisation) -> {
+        private static final List<CopperGolemEntity.Oxidisation> VALUES = (List) Stream.of(values()).sorted(Comparator.comparingDouble((oxidisation) -> {
             return (double)oxidisation.maxHealthFraction;
         })).collect(ImmutableList.toImmutableList());
         private final float maxHealthFraction;

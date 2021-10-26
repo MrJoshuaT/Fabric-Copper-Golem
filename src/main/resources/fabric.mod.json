@@ -9,8 +9,9 @@
     "MrJoshuaT"
   ],
   "contact": {
-    "homepage": "https://www.planetminecraft.com/mod/copper-golem-for-fabric/",
-    "sources": "https://github.com/MrJoshuaT/Fabric-Copper-Golem"
+    "homepage": "https://www.curseforge.com/minecraft/mc-mods/copper-golem-for-fabric",
+    "sources": "https://github.com/MrJoshuaT/Fabric-Copper-Golem",
+    "issues": "https://github.com/MrJoshuaT/Fabric-Copper-Golem/issues"
   },
 
   "license": "LGPL-3.0-only",

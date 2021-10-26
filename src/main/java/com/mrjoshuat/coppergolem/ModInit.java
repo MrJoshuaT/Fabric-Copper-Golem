@@ -23,8 +23,8 @@ public class ModInit implements ModInitializer {
 	public static final EntityType<CopperGolemEntity> COPPER_GOLEM_ENTITY_TYPE = Registry.register(
 			Registry.ENTITY_TYPE,
 			new Identifier("minecraft", "copper_golem"),
-			FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, CopperGolemEntity::new)
-					.dimensions(EntityDimensions.fixed(0.75f, 1f)).build()
+			FabricEntityTypeBuilder.create(SpawnGroup.MISC, CopperGolemEntity::new)
+					.dimensions(EntityDimensions.fixed(0.75f, 1.15f)).build()
 	);
 
 	public static final Item IRON_GOLEM_SPAWN_EGG = new SpawnEggItem(COPPER_GOLEM_ENTITY_TYPE,

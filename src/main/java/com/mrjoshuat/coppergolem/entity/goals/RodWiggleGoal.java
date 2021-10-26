@@ -27,7 +27,7 @@ public class RodWiggleGoal extends Goal {
     public void tick() {
         var ticks  = this.entity.getLastRodWiggleTicks();
         if (ticks > 0) {
-            this.entity.setLastRodWiggleTicksTicks(ticks--);
+            this.entity.setLastRodWiggleTicksTicks(--ticks);
         } else {
             this.entity.setLastRodWiggleTicksTicks(20);
         }
