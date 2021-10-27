@@ -1,9 +1,7 @@
 package com.mrjoshuat.coppergolem;
 
-import com.google.common.base.Suppliers;
-import com.google.common.collect.BiMap;
-import com.google.common.collect.HashBiMap;
 import com.mrjoshuat.coppergolem.block.OxidizableButtonBlock;
+import com.mrjoshuat.coppergolem.block.WaxedOxidizableButtonBlock;
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
 import net.fabricmc.api.ModInitializer;
@@ -21,14 +19,10 @@ import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.*;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.Rarity;
 import net.minecraft.util.registry.Registry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import java.lang.reflect.Field;
-import java.lang.reflect.Modifier;
 
 public class ModInit implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(ClientMod.ID);
@@ -46,10 +40,20 @@ public class ModInit implements ModInitializer {
 	public static final Identifier WEATHERED_COPPER_BUTTON_ID = new Identifier("minecraft", "weathered_copper_button");
 	public static final Identifier OXIDIZED_COPPER_BUTTON_ID = new Identifier("minecraft", "oxidized_copper_button");
 
+	public static final Identifier WAXED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_copper_button");
+	public static final Identifier WAXED_EXPOSED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_exposed_copper_button");
+	public static final Identifier WAXED_WEATHERED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_weathered_copper_button");
+	public static final Identifier WAXED_OXIDIZED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_oxidized_copper_button");
+
 	public static final Block COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0, COPPER_BUTTON_ID));
 	public static final Block EXPOSED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1, EXPOSED_COPPER_BUTTON_ID));
 	public static final Block WEATHERED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2, WEATHERED_COPPER_BUTTON_ID));
 	public static final Block OXIDIZED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3, OXIDIZED_COPPER_BUTTON_ID));
+
+	public static final Block WAXED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(0, WAXED_COPPER_BUTTON_ID));
+	public static final Block WAXED_EXPOSED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(1, WAXED_EXPOSED_COPPER_BUTTON_ID));
+	public static final Block WAXED_WEATHERED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(2, WAXED_WEATHERED_COPPER_BUTTON_ID));
+	public static final Block WAXED_OXIDIZED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(3, WAXED_OXIDIZED_COPPER_BUTTON_ID));
 
 	@Override
 	public void onInitialize() {
@@ -60,6 +64,11 @@ public class ModInit implements ModInitializer {
 		registerCopperButton(EXPOSED_COPPER_BUTTON_ID, EXPOSED_COPPER_BUTTON);
 		registerCopperButton(WEATHERED_COPPER_BUTTON_ID, WEATHERED_COPPER_BUTTON);
 		registerCopperButton(OXIDIZED_COPPER_BUTTON_ID, OXIDIZED_COPPER_BUTTON);
+
+		registerCopperButton(WAXED_COPPER_BUTTON_ID, WAXED_COPPER_BUTTON);
+		registerCopperButton(WAXED_EXPOSED_COPPER_BUTTON_ID, WAXED_EXPOSED_COPPER_BUTTON);
+		registerCopperButton(WAXED_WEATHERED_COPPER_BUTTON_ID, WAXED_WEATHERED_COPPER_BUTTON);
+		registerCopperButton(WAXED_OXIDIZED_COPPER_BUTTON_ID, WAXED_OXIDIZED_COPPER_BUTTON);
 	}
 
 	private static void registerCopperButton(Identifier identifier, Block block) {

@@ -17,12 +17,6 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
     public OxidizableButtonBlock(Oxidizable.OxidizationLevel oxidizationLevel, AbstractBlock.Settings settings) {
         super(false, settings);
         this.oxidizationLevel = oxidizationLevel;
-
-        //OxidizableBlockCallback.EVENT.register((state, world, pos, random) -> {
-
-        //    this.tickDegradation(this.getStateManager().getOwner()., world, pos, random);
-        //    return ActionResult.PASS;
-        //});
     }
 
     public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
@@ -30,8 +24,7 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
     }
 
     public boolean hasRandomTicks(BlockState state) {
-        var x = OxidizableButton.getIncreasedOxidationBlock(state.getBlock());
-        return x.isPresent();
+        return OxidizableButton.getIncreasedOxidationBlock(state.getBlock()).isPresent();
     }
 
     @Override

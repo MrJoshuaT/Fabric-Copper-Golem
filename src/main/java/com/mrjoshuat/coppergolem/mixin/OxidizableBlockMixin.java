@@ -16,9 +16,9 @@ import java.util.Random;
 @Mixin(OxidizableBlock.class)
 public class OxidizableBlockMixin {
     @Inject(
-            method = "randomTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V",
-            at = @At(value = "INVOKE"),
-            cancellable = true
+        method = "randomTick(Lnet/minecraft/block/BlockState;Lnet/minecraft/server/world/ServerWorld;Lnet/minecraft/util/math/BlockPos;Ljava/util/Random;)V",
+        at = @At(value = "INVOKE"),
+        cancellable = true
     )
     private void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info) {
         // TODO: this should be removed, need a better way

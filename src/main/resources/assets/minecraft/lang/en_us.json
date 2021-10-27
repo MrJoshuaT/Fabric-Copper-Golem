@@ -3,5 +3,9 @@
     "block.minecraft.copper_button": "Copper Button",
     "block.minecraft.exposed_copper_button": "Exposed Copper Button",
     "block.minecraft.weathered_copper_button": "Weathered Copper Button",
-    "block.minecraft.oxidized_copper_button": "Oxidized Copper Button"
+    "block.minecraft.oxidized_copper_button": "Oxidized Copper Button",
+    "block.minecraft.waxed_copper_button": "Waxed Copper Button",
+    "block.minecraft.waxed_exposed_copper_button": "Waxed Exposed Copper Button",
+    "block.minecraft.waxed_weathered_copper_button": "Waxed Weathered Copper Button",
+    "block.minecraft.waxed_oxidized_copper_button": "Waxed Oxidized Copper Button"
 }
