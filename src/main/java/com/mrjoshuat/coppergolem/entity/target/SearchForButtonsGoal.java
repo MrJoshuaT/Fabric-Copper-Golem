@@ -2,6 +2,7 @@ package com.mrjoshuat.coppergolem.entity.target;
 
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
+import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
 import net.minecraft.entity.ai.goal.Goal;
@@ -87,10 +88,5 @@ public class SearchForButtonsGoal extends Goal {
     }
 
     // TODO: what button, so all the buttons?
-    private boolean isValidBlock(Block block) {
-        return block == Blocks.ACACIA_BUTTON || block == Blocks.BIRCH_BUTTON || block == Blocks.CRIMSON_BUTTON ||
-                block == Blocks.DARK_OAK_BUTTON || block == Blocks.JUNGLE_BUTTON  || block == Blocks.OAK_BUTTON ||
-                block == Blocks.SPRUCE_BUTTON || block == Blocks.STONE_BUTTON || block == Blocks.POLISHED_BLACKSTONE_BUTTON ||
-                block == Blocks.WARPED_BUTTON;
-    }
+    private boolean isValidBlock(Block block) { return block instanceof AbstractButtonBlock; }
 }

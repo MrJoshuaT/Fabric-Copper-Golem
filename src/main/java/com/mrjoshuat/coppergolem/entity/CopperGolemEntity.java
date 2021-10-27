@@ -27,12 +27,15 @@ import net.minecraft.nbt.NbtCompound;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleTypes;
 import net.minecraft.server.world.ServerWorld;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
+import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -160,7 +163,7 @@ public class CopperGolemEntity extends GolemEntity {
 
     private void setupRandomTickListener() {
         // TODO: this should be removed, need a better way
-        OxidizableBlockCallback.EVENT.register(() -> {
+        OxidizableBlockCallback.EVENT.register((state, world, pos, random) -> {
             if (this.getWaxed()) {
                 return ActionResult.PASS;
             }
@@ -223,11 +226,11 @@ public class CopperGolemEntity extends GolemEntity {
         var handItem = player.getStackInHand(hand).getItem();
 
         // debug
-        /*if (handItem == Items.DIAMOND_AXE) {
+        if (handItem == Items.DIAMOND_AXE) {
             this.incrementOxidisation();
             this.tickOxidisationAI();
             return ActionResult.success(this.world.isClient);
-        }*/
+        }
 
         if (ALL_AXES.contains(handItem)) {
             if (this.getWaxed()) {

@@ -22,6 +22,6 @@ public class OxidizableBlockMixin {
     )
     private void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random, CallbackInfo info) {
         // TODO: this should be removed, need a better way
-        OxidizableBlockCallback.EVENT.invoker().randomTick();
+        OxidizableBlockCallback.EVENT.invoker().randomTick(state, world, pos, random);
     }
 }

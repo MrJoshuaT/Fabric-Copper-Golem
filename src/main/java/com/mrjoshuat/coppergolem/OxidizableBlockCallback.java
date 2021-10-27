@@ -2,13 +2,18 @@ package com.mrjoshuat.coppergolem;
 
 import net.fabricmc.fabric.api.event.Event;
 import net.fabricmc.fabric.api.event.EventFactory;
+import net.minecraft.block.BlockState;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.ActionResult;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public interface OxidizableBlockCallback {
     Event<OxidizableBlockCallback> EVENT = EventFactory.createArrayBacked(OxidizableBlockCallback.class,
-            (listeners) -> () -> {
+            (listeners) -> (BlockState state, ServerWorld world, BlockPos pos, Random random) -> {
                 for (OxidizableBlockCallback listener : listeners) {
-                    ActionResult result = listener.randomTick();
+                    ActionResult result = listener.randomTick(state, world, pos, random);
 
                     if(result != ActionResult.PASS) {
                         return result;
@@ -18,5 +23,5 @@ public interface OxidizableBlockCallback {
                 return ActionResult.PASS;
             });
 
-    ActionResult randomTick();
+    ActionResult randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random);
 }
