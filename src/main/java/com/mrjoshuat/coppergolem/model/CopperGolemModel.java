@@ -60,9 +60,13 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
         if (armTicks > 0) {
             this.rightArm.pitch = -2.0F + 1.5F * MathHelper.wrap(armTicks, 10.0F);
             this.leftArm.pitch = -2.0F + 1.5F * MathHelper.wrap(armTicks, 10.0F);
+
+            this.body.roll = 0F;
         } else {
             this.leftArm.pitch = -1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
             this.rightArm.pitch = 1.5F * MathHelper.wrap(limbAngle, 13.0F) * limbDistance;
+
+            this.body.roll = 0.15F * MathHelper.wrap(limbAngle, 6.0F) * limbDistance;
         }
 
         var bendOverValue = entity.getBendOverTicks();

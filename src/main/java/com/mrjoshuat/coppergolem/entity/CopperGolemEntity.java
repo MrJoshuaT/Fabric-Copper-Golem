@@ -10,9 +10,7 @@ import com.mrjoshuat.coppergolem.entity.target.SearchForButtonsGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.ai.goal.IronGolemWanderAroundGoal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -83,6 +81,8 @@ public class CopperGolemEntity extends GolemEntity {
 
         var priority = 0;
 
+        this.goalSelector.add(++priority, new SwimGoal(this));
+        this.goalSelector.add(++priority, new EscapeDangerGoal(this, 0.5D));
         this.goalSelector.add(++priority, new IronGolemWanderAroundGoal(this, 0.25D));
         this.goalSelector.add(++priority, new LookAroundGoal(this));
         this.goalSelector.add(++priority, new SpinHeadGoal(this));
@@ -119,7 +119,7 @@ public class CopperGolemEntity extends GolemEntity {
 
         var spinHeadTicks = this.getLastHeadSpinTicks();
         if (spinHeadTicks > 0)
-            this.dataTracker.set(LAST_HEAD_SPIN_TICKS, --spinHeadTicks);
+            this.dataTracker.set(LAST_HEAD_SPIN_TICKS, spinHeadTicks -= 2);
 
         var buttonTicksLeft = this.getButtonTicksLeft();
         if (buttonTicksLeft > 0) {
