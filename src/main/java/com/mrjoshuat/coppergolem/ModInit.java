@@ -6,10 +6,13 @@ import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
+import net.fabricmc.fabric.api.loot.v1.FabricLootPoolBuilder;
+import net.fabricmc.fabric.api.loot.v1.event.LootTableLoadingCallback;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
 import net.minecraft.block.Oxidizable;
@@ -17,6 +20,8 @@ import net.minecraft.entity.EntityDimensions;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.SpawnGroup;
 import net.minecraft.item.*;
+import net.minecraft.loot.entry.ItemEntry;
+import net.minecraft.loot.provider.number.ConstantLootNumberProvider;
 import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
@@ -50,10 +55,10 @@ public class ModInit implements ModInitializer {
 	public static final Block WEATHERED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2, WEATHERED_COPPER_BUTTON_ID));
 	public static final Block OXIDIZED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3, OXIDIZED_COPPER_BUTTON_ID));
 
-	public static final Block WAXED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(0, WAXED_COPPER_BUTTON_ID));
-	public static final Block WAXED_EXPOSED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(1, WAXED_EXPOSED_COPPER_BUTTON_ID));
-	public static final Block WAXED_WEATHERED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(2, WAXED_WEATHERED_COPPER_BUTTON_ID));
-	public static final Block WAXED_OXIDIZED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(buildButtonSettings(3, WAXED_OXIDIZED_COPPER_BUTTON_ID));
+	public static final Block WAXED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0, WAXED_COPPER_BUTTON_ID));
+	public static final Block WAXED_EXPOSED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1, WAXED_EXPOSED_COPPER_BUTTON_ID));
+	public static final Block WAXED_WEATHERED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2, WAXED_WEATHERED_COPPER_BUTTON_ID));
+	public static final Block WAXED_OXIDIZED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3, WAXED_OXIDIZED_COPPER_BUTTON_ID));
 
 	@Override
 	public void onInitialize() {

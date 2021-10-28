@@ -2,12 +2,20 @@ package com.mrjoshuat.coppergolem.block;
 
 import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
 
+import com.mrjoshuat.coppergolem.handler.RedstonePowerHandler;
 import net.minecraft.block.*;
+import net.minecraft.entity.ItemEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
 
 import java.util.Random;
 
@@ -32,8 +40,29 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
         return this.oxidizationLevel;
     }
 
+    @Override
     protected SoundEvent getClickSound(boolean powered) {
         // or to use BLOCK_COPPER_STEP?
         return powered ? SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON : SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF;
+    }
+
+    @Override
+    public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
+        return state.get(POWERED) ? RedstonePowerHandler.getRedstonePower(getDegradationLevel()) : 0;
+    }
+
+    @Override
+    public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
+        return state.get(POWERED) && getDirection(state) == direction ? RedstonePowerHandler.getRedstonePower(getDegradationLevel()) : 0;
+    }
+
+    @Override
+    public void onBreak(World world, BlockPos pos, BlockState state, PlayerEntity player) {
+        if (player.isCreative()) {
+            return;
+        }
+        var itemStack = new ItemStack(state.getBlock(), 1);
+        var itemEntity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, itemStack);
+        world.spawnEntity(itemEntity);
     }
 }

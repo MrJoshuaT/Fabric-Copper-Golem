@@ -20,6 +20,10 @@ Clients need to have the mod installed to see the golems. If they do not have th
 
 ## Features
 
+## Copper Buttons
+* Waxed and unwaxed variants
+  * Lower redstone signal and breaking strengths when oxidised
+
 ### Spawning
 * The spawning combo is a bottom __Copper Block__, middle __Carved Pumpkin__ Block and top __Lightning Rod__.
 * In creative, you can use the Copper Golem spawn egg
@@ -37,7 +41,7 @@ Clients need to have the mod installed to see the golems. If they do not have th
 * Random ticks will cause oxidation to increment, of which are 4 levels (0-3)
 * Interacting with the mob with Honeycomb to Wax it
 * Interacting with the mob with an any Axe will unwax it, if waxed, otherwise if not at first oxidation level will deoxidise it by 1 level
-* Lightning strikes will set oxidation level to 0 (min level)
+* Lightning strikes will set oxidation level to 0 (min level) if not waxed
 
 ## Animation
 * Spinning head randomly

@@ -29,7 +29,8 @@ public class BlockHandler {
         var pattern = BlockPatternBuilder.start().aisle("^", "#", "@")
                 .where('^', CachedBlockPosition.matchesBlockState(BlockStatePredicate.forBlock(Blocks.LIGHTNING_ROD)))
                 .where('#', CachedBlockPosition.matchesBlockState(BlockStatePredicate.forBlock(Blocks.CARVED_PUMPKIN)))
-                .where('@', CachedBlockPosition.matchesBlockState(BlockStatePredicate.forBlock(Blocks.COPPER_BLOCK))).build();;
+                .where('@', CachedBlockPosition.matchesBlockState(BlockStatePredicate.forBlock(Blocks.COPPER_BLOCK)))
+                .build();
 
         var result = pattern.searchAround(world, pos);
         if (result != null) {
