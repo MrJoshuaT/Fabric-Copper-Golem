@@ -1,3 +1,11 @@
 {
-    "item.minecraft.copper_golem_spawn_egg": "Яйцо призыва медного голема"
+    "item.minecraft.copper_golem_spawn_egg": "Яйцо призыва медного голема",
+    "block.minecraft.copper_button": "Медная кнопка",
+    "block.minecraft.exposed_copper_button": "Потемневшая медная кнопка",
+    "block.minecraft.weathered_copper_button": "Состаренная медная кнопка",
+    "block.minecraft.oxidized_copper_button": "Окисленная медная кнопка",
+    "block.minecraft.waxed_copper_button": "Вощёная медная кнопка",
+    "block.minecraft.waxed_exposed_copper_button": "Вощёная потемневшая медная кнопка",
+    "block.minecraft.waxed_weathered_copper_button": "Вощёная состаренная медная кнопка",
+    "block.minecraft.waxed_oxidized_copper_button": "Вощёная окисленная медная кнопка"
 }
