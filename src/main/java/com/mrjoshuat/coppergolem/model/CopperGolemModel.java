@@ -45,7 +45,6 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
 		this.rightLeg.yaw = 0.0F;
 		this.leftLeg.yaw = 0.0F;
 
-        // Head spinning
         var process = entity.getHeadSpinProgress();
         if (process > 0) {
             float l = (0.5F + process) * 3.1415927F;
@@ -55,7 +54,6 @@ public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEnt
             this.head.yaw = headYaw * 0.017453292F;
         }
 
-        // Arm moving
         var armTicks = entity.getButtonTicksLeft();
         if (armTicks > 0) {
             this.rightArm.pitch = -2.0F + 1.5F * MathHelper.wrap(armTicks, 10.0F);
