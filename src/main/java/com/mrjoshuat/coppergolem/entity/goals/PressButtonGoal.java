@@ -22,7 +22,7 @@ public class PressButtonGoal extends Goal {
     @Override
     public boolean canStart() { return this.entity.getBlockTarget() != null && this.entity.getRandom().nextFloat() > 0.6f; }
 
-    public boolean shouldContinue() { return !this.canStart(); }
+    public boolean shouldContinue() { return this.entity.getBlockTarget() != null; }
 
     public void start() {
         var target = this.entity.getBlockTarget();
@@ -38,7 +38,6 @@ public class PressButtonGoal extends Goal {
         if (target == null || !canClickTarget(target) || lastTick >= 20)
             return;
 
-        // TODO: if a user breaks a block the golem will still attempt to press it, causing issues
         try {
             BlockState state = this.entity.world.getBlockState(target);
             Block block = state.getBlock();
@@ -46,9 +45,9 @@ public class PressButtonGoal extends Goal {
                 return;
             AbstractButtonBlock button = (AbstractButtonBlock) block;
             if (state.get(AbstractButtonBlock.FACE) == WallMountLocation.FLOOR) {
-                this.entity.setBendOverTicks(10);
+                this.entity.setBendOverTicks(10); // bend forwards
             } else if (state.get(AbstractButtonBlock.FACE) == WallMountLocation.CEILING) {
-                this.entity.setBendOverTicks(-10);
+                this.entity.setBendOverTicks(-10); // bend backwards
             }
             button.onUse(state, entity.world, target, null, Hand.MAIN_HAND, null);
             this.lastTick = 20 * 5;

@@ -10,9 +10,7 @@ import com.mrjoshuat.coppergolem.entity.target.SearchForButtonsGoal;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LightningEntity;
-import net.minecraft.entity.ai.goal.IronGolemWanderAroundGoal;
-import net.minecraft.entity.ai.goal.LookAroundGoal;
-import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.*;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -24,14 +22,17 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.nbt.NbtCompound;
-import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
 import net.minecraft.particle.ParticleTypes;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Box;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -39,6 +40,7 @@ import net.minecraft.world.WorldEvents;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 public class CopperGolemEntity extends GolemEntity {
@@ -86,13 +88,15 @@ public class CopperGolemEntity extends GolemEntity {
 
         var priority = 0;
 
+        this.goalSelector.add(++priority, new SwimGoal(this));
+        this.goalSelector.add(++priority, new EscapeDangerGoal(this, 0.5D));
         this.goalSelector.add(++priority, new IronGolemWanderAroundGoal(this, 0.25D));
+        this.goalSelector.add(++priority, new PressButtonGoal(this));
         this.goalSelector.add(++priority, new LookAroundGoal(this));
         this.goalSelector.add(++priority, new SpinHeadGoal(this));
+        this.goalSelector.add(++priority, new RodWiggleGoal(this));
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, IronGolemEntity.class, 10.0F));
-        this.goalSelector.add(++priority, new PressButtonGoal(this));
-        this.goalSelector.add(++priority, new RodWiggleGoal(this));
 
         this.targetSelector.add(1, new SearchForButtonsGoal(this));
     }
@@ -119,11 +123,12 @@ public class CopperGolemEntity extends GolemEntity {
 
     public void tickMovement() {
         super.tickMovement();
+        this.tickButtonMovements();
+        this.tickHeadSpin();
+        this.tickOxidisationAI();
+    }
 
-        var spinHeadTicks = this.getLastHeadSpinTicks();
-        if (spinHeadTicks > 0)
-            this.dataTracker.set(LAST_HEAD_SPIN_TICKS, --spinHeadTicks);
-
+    private void tickButtonMovements() {
         var buttonTicksLeft = this.getButtonTicksLeft();
         if (buttonTicksLeft > 0) {
             this.dataTracker.set(LAST_BUTTON_PRESS_TICKS, --buttonTicksLeft);
@@ -138,24 +143,27 @@ public class CopperGolemEntity extends GolemEntity {
                 }
             }
         }
-
-        this.tickHeadSpin();
-        this.tickOxidisationAI();
     }
 
     private void tickHeadSpin() {
-        var ticks = (float)this.getLastHeadSpinTicks();
-        if (ticks <= 0)
+        var spinHeadTicks = this.getLastHeadSpinTicks();
+        if (spinHeadTicks > 0)  {
+            spinHeadTicks -= 2;
+            this.dataTracker.set(LAST_HEAD_SPIN_TICKS, spinHeadTicks);
+        }
+        if (spinHeadTicks <= 0)
             return;
-        this.headSpinProgress = (ticks * 0.01F) - 0.05F;
+        this.headSpinProgress = (spinHeadTicks * 0.01F) - 0.05F;
     }
 
     protected void tickOxidisationAI() {
         var oxidisation = getOxidisation();
-        if (oxidisation == Oxidisation.OXIDIZED && !this.isAiDisabled()) {
+        var aiDisabled = this.isAiDisabled();
+        if (oxidisation == Oxidisation.OXIDIZED && !aiDisabled) {
             this.setAiDisabled(true);
             this.clearGoalsAndTasks();
-        } else if (oxidisation != Oxidisation.OXIDIZED && this.isAiDisabled()) {
+            this.setLastRodWiggleTicksLeft(0);
+        } else if (oxidisation != Oxidisation.OXIDIZED && aiDisabled) {
             this.setAiDisabled(false);
             this.initGoals();
         }
@@ -172,8 +180,37 @@ public class CopperGolemEntity extends GolemEntity {
         });
     }
 
-    protected void tickDegradation() {
-        if (this.random.nextFloat() < 0.005f) {
+    private void tickDegradation() {
+        int i = this.getOxidizationLevel();
+        if (i == MAX_LEVEL)
+            return;
+
+        AtomicInteger j = new AtomicInteger();
+        AtomicInteger k = new AtomicInteger();
+        BlockPos pos = getBlockPos();
+        Box box = new Box(pos).expand(4, 4, 4);
+        var entities = world.getEntitiesByClass(CopperGolemEntity.class, box, golem -> golem != this);
+        entities.forEach(entity -> {
+            Enum<?> enum_ = entity.getOxidisation();
+            if (this.getOxidisation().getClass() == enum_.getClass()) {
+                int m = enum_.ordinal();
+                if (m < i) {
+                    return;
+                }
+
+                if (m > i) {
+                    k.getAndIncrement();
+                } else {
+                    j.getAndIncrement();
+                }
+            }
+        });
+
+        float f = (float)(k.get() + 1) / (float)(k.get() + j.get() + 1);
+        float g = f * f * 0.01F;
+        float rf = random.nextFloat();
+        if (rf < g) {
+            //ModInit.LOGGER.info("[incrementOxidisation] rf:{}, g:{}, k:{}, j:{}", rf, g, k.get(), j.get());
             this.incrementOxidisation();
         }
     }
@@ -223,7 +260,8 @@ public class CopperGolemEntity extends GolemEntity {
             return ActionResult.PASS;
         }
 
-        var handItem = player.getStackInHand(hand).getItem();
+        ItemStack stack = player.getStackInHand(hand);
+        Item handItem = stack.getItem();
 
         // debug
         if (handItem == Items.DIAMOND_AXE) {
@@ -235,13 +273,19 @@ public class CopperGolemEntity extends GolemEntity {
         if (ALL_AXES.contains(handItem)) {
             if (this.getWaxed()) {
                 this.setWaxed(false);
-                addParticle(ParticleTypes.WAX_OFF);
+                if (!player.isCreative()) {
+                    stack.damage(1, getRandom(), (ServerPlayerEntity) null);
+                }
+                addParticle(WorldEvents.WAX_REMOVED, SoundEvents.ITEM_AXE_WAX_OFF);
                 return ActionResult.success(this.world.isClient);
             }
 
             if (this.decrementOxidization()) {
                 this.tickOxidisationAI();
-                addParticle(ParticleTypes.SCRAPE);
+                if (!player.isCreative()) {
+                    stack.damage(1, getRandom(), (ServerPlayerEntity) null);
+                }
+                addParticle(WorldEvents.BLOCK_SCRAPED, SoundEvents.ITEM_AXE_SCRAPE);
                 return ActionResult.success(this.world.isClient);
             }
             return ActionResult.PASS;
@@ -249,7 +293,10 @@ public class CopperGolemEntity extends GolemEntity {
 
         if (handItem == Items.HONEYCOMB) {
             this.setWaxed(true);
-            addParticle(ParticleTypes.WAX_ON);
+            if (!player.isCreative()) {
+                stack.decrement(1);
+            }
+            addParticle(WorldEvents.BLOCK_WAXED, SoundEvents.ITEM_HONEYCOMB_WAX_ON);
             return ActionResult.success(this.world.isClient);
         }
 
@@ -257,7 +304,10 @@ public class CopperGolemEntity extends GolemEntity {
             var currentHealth = getHealth();
             heal(INGOT_HEALTH_INCREASE);
             if (getHealth() > currentHealth) {
-                addParticle(ParticleTypes.HEART);
+                if (!player.isCreative()) {
+                    stack.decrement(1);
+                }
+                produceParticles(ParticleTypes.HEART);
                 return ActionResult.success(this.world.isClient);
             }
         }
@@ -265,8 +315,19 @@ public class CopperGolemEntity extends GolemEntity {
         return ActionResult.PASS;
     }
 
-    private void addParticle(DefaultParticleType particle) {
-        this.world.addParticle(particle, getX(), getY() + 1, getZ(), 0d, 5d, 0d);
+    // From MerchantEntity to create same heart effects
+    protected void produceParticles(ParticleEffect parameters) {
+        for(int i = 0; i < 5; ++i) {
+            double d = this.random.nextGaussian() * 0.02D;
+            double e = this.random.nextGaussian() * 0.02D;
+            double f = this.random.nextGaussian() * 0.02D;
+            this.world.addParticle(parameters, this.getParticleX(1.0D), this.getRandomBodyY() + 1.0D, this.getParticleZ(1.0D), d, e, f);
+        }
+    }
+
+    private void addParticle(int worldEvent, SoundEvent soundEvent) {
+        world.playSound(null, getBlockPos(),soundEvent, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        world.syncWorldEvent(null, worldEvent, getBlockPos(), 0);
     }
 
     public void writeCustomDataToNbt(NbtCompound nbt) {
@@ -318,7 +379,7 @@ public class CopperGolemEntity extends GolemEntity {
 
     public float getBendOverTicks() { return this.dataTracker.get(SHOULD_BEND_OVER); }
 
-    public void setLastRodWiggleTicksTicks(float ticks) { this.dataTracker.set(LAST_ROD_WIGGLE_TICKS, ticks); }
+    public void setLastRodWiggleTicksLeft(float ticks) { this.dataTracker.set(LAST_ROD_WIGGLE_TICKS, ticks); }
 
     public float getLastRodWiggleTicks() { return this.dataTracker.get(LAST_ROD_WIGGLE_TICKS); }
 

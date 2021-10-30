@@ -43,17 +43,19 @@ Clients need to have the mod installed to see the golems. If they do not have th
 * Interacting with the mob with an any Axe will unwax it, if waxed, otherwise if not at first oxidation level will deoxidise it by 1 level
 * Lightning strikes will set oxidation level to 0 (min level) if not waxed
 
-## Animation
+## Animations
 * Spinning head randomly
 * Arm/body moving when pressing button
 * Rod wiggling randomly
+* Body wiggle when walking
 
 ## Current to do list
-### Block / Entity
-* Add copper buttons, and their oxidise variants
 
-### Misc
+### Entity
+* Oxidation is done via random ticks from copper blocks, but once whey are waxed or reach oxidized state no more random ticks occur. 
 * Freezing limbs in place once at last stage of oxidation
+* Lightning attracted to golem
+* Walking / running speed should decrease with oxidation level
 
 ### Mod / Cloth menu
 * Option to select all/specific buttons to press
