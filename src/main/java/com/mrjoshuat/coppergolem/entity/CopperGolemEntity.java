@@ -171,7 +171,7 @@ public class CopperGolemEntity extends GolemEntity {
 
     private void setupRandomTickListener() {
         // TODO: this should be removed, need a better way
-        OxidizableBlockCallback.EVENT.register(() -> {
+        OxidizableBlockCallback.EVENT.register((state, world, pos, random) -> {
             if (this.getWaxed()) {
                 return ActionResult.PASS;
             }
@@ -264,11 +264,11 @@ public class CopperGolemEntity extends GolemEntity {
         Item handItem = stack.getItem();
 
         // debug
-        /*if (handItem == Items.DIAMOND_AXE) {
+        if (handItem == Items.DIAMOND_AXE) {
             this.incrementOxidisation();
             this.tickOxidisationAI();
             return ActionResult.success(this.world.isClient);
-        }*/
+        }
 
         if (ALL_AXES.contains(handItem)) {
             if (this.getWaxed()) {

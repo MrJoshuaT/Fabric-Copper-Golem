@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/template_copper_button_pressed",
+  "textures": {
+    "texture": "block/oxidized_copper"
+  }
+}

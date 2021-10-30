@@ -7,7 +7,9 @@
   ],
   "client": [
     "BlockMixin",
-    "OxidizableBlockMixin"
+    "OxidizableBlockMixin",
+    "AxeItemMixin",
+    "HoneycombItemMixin"
   ],
   "injectors": {
     "defaultRequire": 1
