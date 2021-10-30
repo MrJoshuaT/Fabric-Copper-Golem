@@ -1,6 +1,7 @@
 package com.mrjoshuat.coppergolem.mixin;
 
 import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
+
 import net.minecraft.block.BlockState;
 import net.minecraft.block.OxidizableBlock;
 import net.minecraft.server.world.ServerWorld;

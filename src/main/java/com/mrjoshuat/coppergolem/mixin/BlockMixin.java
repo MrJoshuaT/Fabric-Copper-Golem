@@ -1,22 +1,12 @@
 package com.mrjoshuat.coppergolem.mixin;
 
-import com.mrjoshuat.coppergolem.ModInit;
-import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
-
 import com.mrjoshuat.coppergolem.handler.BlockHandler;
-import net.minecraft.advancement.criterion.Criteria;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.pattern.BlockPatternBuilder;
-import net.minecraft.block.pattern.CachedBlockPosition;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.predicate.block.BlockStatePredicate;
-import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraft.world.WorldEvents;
 
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;

@@ -18,9 +18,10 @@ The server must have the mod installed.
 
 Clients need to have the mod installed to see the golems. If they do not have the mod the game seems to render a Pig for me 🤷‍♂️.
 
-## Features
+---
 
-## Copper Buttons
+## Features
+### Copper Buttons
 * Waxed and unwaxed variants
   * Lower redstone signal and breaking strengths when oxidised
 
@@ -29,13 +30,17 @@ Clients need to have the mod installed to see the golems. If they do not have th
 * In creative, you can use the Copper Golem spawn egg
 
 ### Goals, in priority order
-* Wandering around, this is taken straight from the Iron Golem code
+* Swim, to escape from water
+* Escape from danger, run away from attackers
+* Wandering around, this is taken straight from the Iron Golem code, to wander near villagers or to random blocks
+* Press button
 * Looking around
 * Spin head
-* Find buttons to press
+* Rod wiggle
 * Look at player
 * Look at Iron Golems, as they're their big brother
-* Press button
+
+* Find buttons to press
 
 ### Oxidation
 * Random ticks will cause oxidation to increment, of which are 4 levels (0-3)
@@ -50,7 +55,6 @@ Clients need to have the mod installed to see the golems. If they do not have th
 * Body wiggle when walking
 
 ## Current to do list
-
 ### Entity
 * Oxidation is done via random ticks from copper blocks, but once whey are waxed or reach oxidized state no more random ticks occur. 
 * Freezing limbs in place once at last stage of oxidation
@@ -58,7 +62,7 @@ Clients need to have the mod installed to see the golems. If they do not have th
 * Walking / running speed should decrease with oxidation level
 
 ### Mod / Cloth menu
-* Option to select all/specific buttons to press
+* Option to select all/specific buttons to press. Currently, any button extending from `AbstractButtonBlock` will be targeted.
 
 ... more to be added
 
