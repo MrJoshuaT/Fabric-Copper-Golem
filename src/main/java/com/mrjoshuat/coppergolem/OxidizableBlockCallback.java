@@ -11,17 +11,17 @@ import java.util.Random;
 
 public interface OxidizableBlockCallback {
     Event<OxidizableBlockCallback> EVENT = EventFactory.createArrayBacked(OxidizableBlockCallback.class,
-            (listeners) -> (BlockState state, ServerWorld world, BlockPos pos, Random random) -> {
-                for (OxidizableBlockCallback listener : listeners) {
-                    ActionResult result = listener.randomTick(state, world, pos, random);
+        (listeners) -> (BlockState state, ServerWorld world, BlockPos pos, Random random) -> {
+            for (OxidizableBlockCallback listener : listeners) {
+                ActionResult result = listener.randomTick(state, world, pos, random);
 
-                    if(result != ActionResult.PASS) {
-                        return result;
-                    }
+                if(result != ActionResult.PASS) {
+                    return result;
                 }
+            }
 
-                return ActionResult.PASS;
-            });
+            return ActionResult.PASS;
+        });
 
     ActionResult randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random);
 }

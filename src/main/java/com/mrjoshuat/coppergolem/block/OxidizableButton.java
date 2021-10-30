@@ -17,9 +17,7 @@ public interface OxidizableButton extends Degradable<Oxidizable.OxidizationLevel
         map.put(ModInit.WEATHERED_COPPER_BUTTON, ModInit.OXIDIZED_COPPER_BUTTON);
         return map;
     });
-    Supplier<BiMap<Block, Block>> BUTTON_OXIDATION_LEVEL_DECREASES = Suppliers.memoize(() -> {
-        return ((BiMap)BUTTON_OXIDATION_LEVEL_INCREASES.get()).inverse();
-    });
+    Supplier<BiMap<Block, Block>> BUTTON_OXIDATION_LEVEL_DECREASES = Suppliers.memoize(() -> ((BiMap)BUTTON_OXIDATION_LEVEL_INCREASES.get()).inverse());
 
     static Optional<Block> getDecreasedOxidationBlock(Block block) {
         return Optional.ofNullable((Block)((BiMap) BUTTON_OXIDATION_LEVEL_DECREASES.get()).get(block));
@@ -44,9 +42,7 @@ public interface OxidizableButton extends Degradable<Oxidizable.OxidizationLevel
     }
 
     static Optional<Block> getIncreasedOxidationBlock(Block block) {
-        var x = (BiMap)BUTTON_OXIDATION_LEVEL_INCREASES.get();
-        var b = (Block)(x).get(block);
-        return Optional.ofNullable(b);
+        return Optional.ofNullable((Block)((BiMap)BUTTON_OXIDATION_LEVEL_INCREASES.get()).get(block));
     }
 
     static BlockState getUnaffectedOxidationState(BlockState state) {

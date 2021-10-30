@@ -56,7 +56,7 @@ Clients need to have the mod installed to see the golems. If they do not have th
 
 ## Current to do list
 ### Entity
-* Oxidation is done via random ticks from copper blocks, but once whey are waxed or reach oxidized state no more random ticks occur. 
+* Oxidation is done via random ticks from copper blocks, but once whey are waxed or reach oxidized state no more random ticks occur, so this is not great. 
 * Freezing limbs in place once at last stage of oxidation
 * Lightning attracted to golem
 * Walking / running speed should decrease with oxidation level

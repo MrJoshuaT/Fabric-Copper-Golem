@@ -1,6 +1,5 @@
 package com.mrjoshuat.coppergolem.block;
 
-import com.mrjoshuat.coppergolem.handler.RedstonePowerHandler;
 import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Oxidizable;
@@ -28,16 +27,14 @@ public class WaxedOxidizableButtonBlock extends AbstractButtonBlock {
         return powered ? SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_ON : SoundEvents.BLOCK_METAL_PRESSURE_PLATE_CLICK_OFF;
     }
 
-
-
     @Override
     public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        return state.get(POWERED) ? RedstonePowerHandler.getRedstonePower(level) : 0;
+        return state.get(POWERED) ? OxidizableButtonBlock.getRedstonePower(level) : 0;
     }
 
     @Override
     public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        return state.get(POWERED) && getDirection(state) == direction ? RedstonePowerHandler.getRedstonePower(level) : 0;
+        return state.get(POWERED) && getDirection(state) == direction ? OxidizableButtonBlock.getRedstonePower(level) : 0;
     }
 
     @Override

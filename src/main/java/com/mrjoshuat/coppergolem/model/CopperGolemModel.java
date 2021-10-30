@@ -12,7 +12,6 @@ import net.minecraft.util.math.MathHelper;
 
 @Environment(EnvType.CLIENT)
 public class CopperGolemModel<T extends CopperGolemEntity> extends SinglePartEntityModel<T> {
-
     private final ModelPart root;
     private final ModelPart body;
     private final ModelPart head;

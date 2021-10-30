@@ -1,17 +1,12 @@
 package com.mrjoshuat.coppergolem.block;
 
-import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
-
-import com.mrjoshuat.coppergolem.handler.RedstonePowerHandler;
 import net.minecraft.block.*;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
@@ -48,12 +43,12 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
 
     @Override
     public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        return state.get(POWERED) ? RedstonePowerHandler.getRedstonePower(getDegradationLevel()) : 0;
+        return state.get(POWERED) ? getRedstonePower(getDegradationLevel()) : 0;
     }
 
     @Override
     public int getStrongRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-        return state.get(POWERED) && getDirection(state) == direction ? RedstonePowerHandler.getRedstonePower(getDegradationLevel()) : 0;
+        return state.get(POWERED) && getDirection(state) == direction ? getRedstonePower(getDegradationLevel()) : 0;
     }
 
     @Override
@@ -64,5 +59,14 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
         var itemStack = new ItemStack(state.getBlock(), 1);
         var itemEntity = new ItemEntity(world, pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D, itemStack);
         world.spawnEntity(itemEntity);
+    }
+
+    public static int getRedstonePower(Oxidizable.OxidizationLevel level) {
+        return 15 - (3 * switch (level) {
+            case UNAFFECTED -> 0;
+            case EXPOSED -> 1;
+            case WEATHERED -> 2;
+            case OXIDIZED -> 3;
+        });
     }
 }

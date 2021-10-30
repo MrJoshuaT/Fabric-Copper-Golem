@@ -59,8 +59,8 @@ public class BlockHandler {
                     world.updateNeighbors(cachedBlockPosition4.getBlockPos(), Blocks.AIR);
                 }
             }
-        }
 
-        info.cancel();
+            info.cancel();
+        }
     }
 }

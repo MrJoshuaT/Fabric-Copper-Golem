@@ -29,9 +29,9 @@ public class ModInit implements ModInitializer {
 	public static final Logger LOGGER = LogManager.getLogger(ClientMod.ID);
 
 	public static final EntityType<CopperGolemEntity> COPPER_GOLEM_ENTITY_TYPE = Registry.register(
-			Registry.ENTITY_TYPE,
-			new Identifier("minecraft", "copper_golem"),
-			FabricEntityTypeBuilder.create(SpawnGroup.MISC, CopperGolemEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.15f)).build()
+		Registry.ENTITY_TYPE,
+		new Identifier("minecraft", "copper_golem"),
+		FabricEntityTypeBuilder.create(SpawnGroup.MISC, CopperGolemEntity::new).dimensions(EntityDimensions.fixed(0.75f, 1.15f)).build()
 	);
 
 	public static final Item IRON_GOLEM_SPAWN_EGG = new SpawnEggItem(COPPER_GOLEM_ENTITY_TYPE,13136982, 	5805694, new Item.Settings().group(ItemGroup.MISC));
@@ -46,15 +46,15 @@ public class ModInit implements ModInitializer {
 	public static final Identifier WAXED_WEATHERED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_weathered_copper_button");
 	public static final Identifier WAXED_OXIDIZED_COPPER_BUTTON_ID = new Identifier("minecraft", "waxed_oxidized_copper_button");
 
-	public static final Block COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0, COPPER_BUTTON_ID));
-	public static final Block EXPOSED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1, EXPOSED_COPPER_BUTTON_ID));
-	public static final Block WEATHERED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2, WEATHERED_COPPER_BUTTON_ID));
-	public static final Block OXIDIZED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3, OXIDIZED_COPPER_BUTTON_ID));
+	public static final Block COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0));
+	public static final Block EXPOSED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1));
+	public static final Block WEATHERED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2));
+	public static final Block OXIDIZED_COPPER_BUTTON = new OxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3));
 
-	public static final Block WAXED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0, WAXED_COPPER_BUTTON_ID));
-	public static final Block WAXED_EXPOSED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1, WAXED_EXPOSED_COPPER_BUTTON_ID));
-	public static final Block WAXED_WEATHERED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2, WAXED_WEATHERED_COPPER_BUTTON_ID));
-	public static final Block WAXED_OXIDIZED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3, WAXED_OXIDIZED_COPPER_BUTTON_ID));
+	public static final Block WAXED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.UNAFFECTED, buildButtonSettings(0));
+	public static final Block WAXED_EXPOSED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.EXPOSED, buildButtonSettings(1));
+	public static final Block WAXED_WEATHERED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.WEATHERED, buildButtonSettings(2));
+	public static final Block WAXED_OXIDIZED_COPPER_BUTTON = new WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel.OXIDIZED, buildButtonSettings(3));
 
 	@Override
 	public void onInitialize() {
@@ -78,13 +78,12 @@ public class ModInit implements ModInitializer {
 	}
 
 	private static final float buttonStrengthBase = 4f;
-	private static FabricBlockSettings buildButtonSettings(int val, Identifier identifier) {
+	private static FabricBlockSettings buildButtonSettings(int val) {
 		return FabricBlockSettings.of(Material.DECORATION)
 			.noCollision()
 			.requiresTool()
 			.breakByTool(FabricToolTags.PICKAXES)
 			.sounds(BlockSoundGroup.COPPER)
-			.strength(buttonStrengthBase - (buttonStrengthBase * (val * 0.1f)))
-			.drops(identifier);
+			.strength(buttonStrengthBase - (buttonStrengthBase * (val * 0.1f)));
 	}
 }
