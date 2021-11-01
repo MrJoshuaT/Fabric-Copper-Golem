@@ -1,6 +1,5 @@
 package com.mrjoshuat.coppergolem.entity;
 
-import com.google.common.collect.ImmutableList;
 import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
 import com.mrjoshuat.coppergolem.entity.goals.PressButtonGoal;
 import com.mrjoshuat.coppergolem.entity.goals.RodWiggleGoal;
@@ -39,7 +38,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Stream;
 
 public class CopperGolemEntity extends GolemEntity {
     protected static final TrackedData<Float> LAST_ROD_WIGGLE_TICKS;
@@ -74,7 +72,8 @@ public class CopperGolemEntity extends GolemEntity {
     public CopperGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
         super(entityType, world);
 
-        this.setupRandomTickListener();
+        if (!world.isClient)
+            this.setupRandomTickListener();
     }
 
     protected boolean oxidizationLevelValidForGoals() { return this.getOxidisation() != Oxidisation.OXIDIZED; }
@@ -121,6 +120,8 @@ public class CopperGolemEntity extends GolemEntity {
 
     public void tickMovement() {
         super.tickMovement();
+        if (this.world.isClient)
+            return;
         this.tickButtonMovements();
         this.tickHeadSpin();
         this.tickOxidisationAI();
@@ -170,10 +171,9 @@ public class CopperGolemEntity extends GolemEntity {
     private void setupRandomTickListener() {
         // TODO: this should be removed, need a better way
         OxidizableBlockCallback.EVENT.register((state, world, pos, random) -> {
-            if (this.getWaxed()) {
-                return ActionResult.PASS;
+            if (isAlive() && !this.getWaxed()) {
+                this.tickDegradation();
             }
-            this.tickDegradation();
             return ActionResult.PASS;
         });
     }
@@ -218,7 +218,7 @@ public class CopperGolemEntity extends GolemEntity {
         if (level >= MAX_LEVEL) {
             return; // no more steps to go
         }
-        this.setOxidisationLevel(level + 1);
+        this.setOxidisationLevel(++level);
     }
 
     public boolean decrementOxidization() {
@@ -226,7 +226,7 @@ public class CopperGolemEntity extends GolemEntity {
         if (level <= MIN_LEVEL) {
             return false;
         }
-        this.setOxidisationLevel(level - 1);
+        this.setOxidisationLevel(--level);
         return true;
     }
 
@@ -262,11 +262,11 @@ public class CopperGolemEntity extends GolemEntity {
         Item handItem = stack.getItem();
 
         // debug
-        if (handItem == Items.DIAMOND_AXE) {
+        /*if (handItem == Items.DIAMOND_AXE) {
             this.incrementOxidisation();
             this.tickOxidisationAI();
             return ActionResult.success(this.world.isClient);
-        }
+        }*/
 
         if (ALL_AXES.contains(handItem)) {
             if (this.getWaxed()) {
@@ -289,7 +289,7 @@ public class CopperGolemEntity extends GolemEntity {
             return ActionResult.PASS;
         }
 
-        if (handItem == Items.HONEYCOMB) {
+        if (handItem == Items.HONEYCOMB && !this.getWaxed()) {
             this.setWaxed(true);
             if (!player.isCreative()) {
                 stack.decrement(1);
@@ -352,12 +352,31 @@ public class CopperGolemEntity extends GolemEntity {
     public void clearBlockTarget() { this.blockTarget = null; }
 
     public Oxidisation getOxidisation() {
-        return Oxidisation.from(this.getOxidizationLevel());
+        var level = this.getOxidizationLevel();
+        if (level <= 0)
+            return Oxidisation.UNAFFECTED;
+        else if (level == 1) {
+            return Oxidisation.EXPOSED;
+        } else if (level == 2) {
+            return Oxidisation.WEATHERED;
+        }
+        return Oxidisation.OXIDIZED;
     }
 
-    public int getOxidizationLevel() { return this.dataTracker.get(OXIDIZATION_LEVEL); }
+    private int cachedOxidationLevel = 0;
+    public int getOxidizationLevel() {
+        return cachedOxidationLevel;
+    }
 
-    protected void setOxidisationLevel(int f) { this.dataTracker.set(OXIDIZATION_LEVEL, MathHelper.clamp(f, MIN_LEVEL, MAX_LEVEL)); }
+    protected void setOxidisationLevel(int f) {
+        cachedOxidationLevel = f;
+        this.dataTracker.set(OXIDIZATION_LEVEL, f);
+    }
+
+    public void updateOxidizationLevel() {
+        var val = this.dataTracker.get(OXIDIZATION_LEVEL);
+        cachedOxidationLevel = val;
+    }
 
     protected boolean getWaxed() { return this.dataTracker.get(IS_WAXED); }
 
@@ -381,34 +400,20 @@ public class CopperGolemEntity extends GolemEntity {
 
     public float getLastRodWiggleTicks() { return this.dataTracker.get(LAST_ROD_WIGGLE_TICKS); }
 
+    @Override
+    public void onTrackedDataSet(TrackedData<?> data) {
+        super.onTrackedDataSet(data);
+        if (this.world.isClient) {
+            if (data.equals(OXIDIZATION_LEVEL)) {
+                this.updateOxidizationLevel();
+            }
+        }
+    }
+
     public enum Oxidisation {
-        UNAFFECTED(0),
-        EXPOSED(1),
-        WEATHERED(2),
-        OXIDIZED(3);
-
-        private static final List<CopperGolemEntity.Oxidisation> VALUES = (List) Stream.of(values()).sorted(Comparator.comparingDouble((oxidisation) -> {
-            return (double)oxidisation.maxHealthFraction;
-        })).collect(ImmutableList.toImmutableList());
-        private final float maxHealthFraction;
-
-        private Oxidisation(float maxHealthFraction) {
-            this.maxHealthFraction = maxHealthFraction;
-        }
-
-        public static Oxidisation from(float healthFraction) {
-            Iterator var1 = VALUES.iterator();
-
-            Oxidisation crack;
-            do {
-                if (!var1.hasNext()) {
-                    return OXIDIZED;
-                }
-
-                crack = (Oxidisation)var1.next();
-            } while(!(healthFraction <= crack.maxHealthFraction));
-
-            return crack;
-        }
+        UNAFFECTED,
+        EXPOSED,
+        WEATHERED,
+        OXIDIZED;
     }
 }
