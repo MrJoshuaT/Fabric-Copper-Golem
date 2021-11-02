@@ -2,8 +2,8 @@ package com.mrjoshuat.coppergolem.mixin;
 
 import com.google.common.collect.BiMap;
 import com.mrjoshuat.coppergolem.block.OxidizableButton;
-
 import com.mrjoshuat.coppergolem.handler.HoneycombItemHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.AxeItem;

@@ -34,8 +34,8 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.*;
 import net.minecraft.world.World;
-
 import net.minecraft.world.WorldEvents;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
@@ -50,14 +50,13 @@ public class CopperGolemEntity extends GolemEntity {
     protected static final TrackedData<Boolean> IS_WAXED;
     protected static final List<Item> ALL_AXES;
 
-    private static int MIN_LEVEL = 0;
-    private static int MAX_LEVEL = 3;
-    private static float INGOT_HEALTH_INCREASE = 5F;
+    private static final int MIN_LEVEL = 0;
+    private static final int MAX_LEVEL = 3;
+    private static final float INGOT_HEALTH_INCREASE = 5F;
 
     private BlockPos blockTarget;
     private float headSpinProgress;
-    private float lastDegradationTick = 0;
-    private float buttonTicksLeft = 0;
+    private int cachedOxidationLevel = 0;
 
     static {
         SHOULD_BEND_OVER = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
@@ -66,9 +65,7 @@ public class CopperGolemEntity extends GolemEntity {
         LAST_BUTTON_PRESS_TICKS = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
         LAST_ROD_WIGGLE_TICKS = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.FLOAT);
         IS_WAXED = DataTracker.registerData(CopperGolemEntity.class, TrackedDataHandlerRegistry.BOOLEAN);
-        ALL_AXES = Arrays.asList(new Item[] {
-                Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.STONE_AXE, Items.WOODEN_AXE
-        });
+        ALL_AXES = Arrays.asList(Items.NETHERITE_AXE, Items.DIAMOND_AXE, Items.IRON_AXE, Items.GOLDEN_AXE, Items.STONE_AXE, Items.WOODEN_AXE);
     }
 
     public CopperGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
@@ -216,7 +213,6 @@ public class CopperGolemEntity extends GolemEntity {
         float g = f * f * 0.01F;
         float rf = random.nextFloat();
         if (rf < g) {
-            //ModInit.LOGGER.info("[incrementOxidisation] rf:{}, g:{}, k:{}, j:{}", rf, g, k.get(), j.get());
             this.incrementOxidisation();
         }
     }
@@ -371,7 +367,6 @@ public class CopperGolemEntity extends GolemEntity {
         return Oxidisation.OXIDIZED;
     }
 
-    private int cachedOxidationLevel = 0;
     public int getOxidizationLevel() {
         return cachedOxidationLevel;
     }
@@ -382,8 +377,7 @@ public class CopperGolemEntity extends GolemEntity {
     }
 
     public void updateOxidizationLevel() {
-        var val = this.dataTracker.get(OXIDIZATION_LEVEL);
-        cachedOxidationLevel = val;
+        cachedOxidationLevel = this.dataTracker.get(OXIDIZATION_LEVEL);
     }
 
     protected boolean getWaxed() { return this.dataTracker.get(IS_WAXED); }

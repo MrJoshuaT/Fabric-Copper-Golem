@@ -55,8 +55,8 @@ public class PressButtonGoal extends Goal {
 
             entity.clearBlockTarget();
         }
-        catch (Exception ignored) {
-            ModInit.LOGGER.error("Failed to press targeted button. Error: " +  ignored.getMessage());
+        catch (Exception e) {
+            ModInit.LOGGER.error("Failed to press targeted button", e);
             // Could be an invalid target now, so clear it out
             entity.clearBlockTarget();
         }

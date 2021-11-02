@@ -1,6 +1,7 @@
 package com.mrjoshuat.coppergolem.mixin;
 
 import com.mrjoshuat.coppergolem.handler.BlockHandler;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
