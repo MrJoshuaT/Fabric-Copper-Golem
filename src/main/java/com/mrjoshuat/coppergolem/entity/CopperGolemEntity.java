@@ -1,6 +1,7 @@
 package com.mrjoshuat.coppergolem.entity;
 
 import com.mrjoshuat.coppergolem.OxidizableBlockCallback;
+import com.mrjoshuat.coppergolem.entity.goals.EscapeWaterGoal;
 import com.mrjoshuat.coppergolem.entity.goals.PressButtonGoal;
 import com.mrjoshuat.coppergolem.entity.goals.RodWiggleGoal;
 import com.mrjoshuat.coppergolem.entity.goals.SpinHeadGoal;
@@ -10,6 +11,7 @@ import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LightningEntity;
 import net.minecraft.entity.ai.goal.*;
+import net.minecraft.entity.ai.pathing.PathNodeType;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.data.DataTracker;
 import net.minecraft.entity.data.TrackedData;
@@ -72,6 +74,11 @@ public class CopperGolemEntity extends GolemEntity {
     public CopperGolemEntity(EntityType<? extends GolemEntity> entityType, World world) {
         super(entityType, world);
 
+        this.setPathfindingPenalty(PathNodeType.DANGER_FIRE, -1.0F);
+        this.setPathfindingPenalty(PathNodeType.WATER, -1.0F);
+        this.setPathfindingPenalty(PathNodeType.LAVA, -1.0F);
+        this.setPathfindingPenalty(PathNodeType.WATER_BORDER, 16.0F);
+
         if (!world.isClient)
             this.setupRandomTickListener();
     }
@@ -86,6 +93,7 @@ public class CopperGolemEntity extends GolemEntity {
         var priority = 0;
 
         this.goalSelector.add(++priority, new SwimGoal(this));
+        this.goalSelector.add(++priority, new EscapeWaterGoal(this));
         this.goalSelector.add(++priority, new EscapeDangerGoal(this, 0.5D));
         this.goalSelector.add(++priority, new IronGolemWanderAroundGoal(this, 0.25D));
         this.goalSelector.add(++priority, new PressButtonGoal(this));
