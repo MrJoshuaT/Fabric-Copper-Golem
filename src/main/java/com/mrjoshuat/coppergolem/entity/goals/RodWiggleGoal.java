@@ -13,8 +13,6 @@ public class RodWiggleGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        if (entity.getBlockTarget() != null)
-            return false;
         return entity.getRandom().nextFloat() > 0.995F;
     }
 

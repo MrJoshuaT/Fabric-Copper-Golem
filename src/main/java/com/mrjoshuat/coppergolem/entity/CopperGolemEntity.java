@@ -88,19 +88,17 @@ public class CopperGolemEntity extends GolemEntity {
         }
 
         var priority = 0;
-
         this.goalSelector.add(++priority, new SwimGoal(this));
         this.goalSelector.add(++priority, new EscapeWaterGoal(this));
         this.goalSelector.add(++priority, new EscapeDangerGoal(this, 0.5D));
-        this.goalSelector.add(++priority, new IronGolemWanderAroundGoal(this, 0.25D));
+        this.goalSelector.add(++priority, new SearchForButtonsGoal(this));
         this.goalSelector.add(++priority, new PressButtonGoal(this));
-        this.goalSelector.add(++priority, new LookAroundGoal(this));
+        this.goalSelector.add(++priority, new IronGolemWanderAroundGoal(this, 0.25D));
         this.goalSelector.add(++priority, new SpinHeadGoal(this));
         this.goalSelector.add(++priority, new RodWiggleGoal(this));
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, PlayerEntity.class, 6.0F));
         this.goalSelector.add(++priority, new LookAtEntityGoal(this, IronGolemEntity.class, 10.0F));
-
-        this.targetSelector.add(1, new SearchForButtonsGoal(this));
+        this.goalSelector.add(++priority, new LookAroundGoal(this));
     }
 
     @Override

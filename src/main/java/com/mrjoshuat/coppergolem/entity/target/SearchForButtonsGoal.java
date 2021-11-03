@@ -6,7 +6,6 @@ import net.minecraft.block.AbstractButtonBlock;
 import net.minecraft.block.Block;
 import net.minecraft.entity.ai.goal.Goal;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
 
 import org.jetbrains.annotations.Nullable;
 
@@ -15,25 +14,21 @@ import java.util.List;
 
 public class SearchForButtonsGoal extends Goal {
     private final CopperGolemEntity entity;
-    public float lastTick = 0;
 
     public SearchForButtonsGoal(CopperGolemEntity entity) {
         this.entity = entity;
     }
 
     @Override
-    public boolean canStart() { return true; }
-
-    public void start() {
-        this.searchForButtons();
+    public boolean canStart() {
+        return this.entity.getBlockTarget() == null && this.entity.getRandom().nextFloat() < 0.1f;
     }
 
-    public void tick() {
-        if (this.lastTick > 0)
-            --this.lastTick;
+    @Override
+    public boolean shouldContinue() { return this.entity.getBlockTarget() == null; }
 
-        if (this.lastTick <= 0)
-            searchForButtons();
+    public void tick() {
+        searchForButtons();
     }
 
     private void searchForButtons() {
@@ -47,15 +42,11 @@ public class SearchForButtonsGoal extends Goal {
             return;
 
         entity.setBlockTarget(pos);
-
-        // Set tick cooldown
-        this.lastTick = 20 * (10 * MathHelper.clamp(entity.getRandom().nextFloat(), 0.5f, 1f));
     }
 
     @Nullable
     private BlockPos getRandomNavigableBlockPos(List<BlockPos> buttons) {
-        while (buttons.size() > 0)
-        {
+        while (buttons.size() > 0) {
             var index = entity.getRandom().nextInt(buttons.size());
             var pos = buttons.get(index);
             var path = this.entity.getNavigation().findPathTo(pos, 1);
@@ -74,11 +65,9 @@ public class SearchForButtonsGoal extends Goal {
         BlockPos pos = this.entity.getBlockPos();
         BlockPos start = pos.add(-10, -10, -10);
         BlockPos end = pos.add(10, 10, 10);
-        for (BlockPos blockpos$mutableblockpos : BlockPos.iterate(start, end))
-        {
+        for (BlockPos blockpos$mutableblockpos : BlockPos.iterate(start, end)) {
             Block block = this.entity.world.getBlockState(blockpos$mutableblockpos).getBlock();
-            if (isValidBlock(block))
-            {
+            if (isValidBlock(block)) {
                 blocks.add(blockpos$mutableblockpos.toImmutable());
             }
         }

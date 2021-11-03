@@ -13,16 +13,19 @@ import net.minecraft.util.math.BlockPos;
 
 public class PressButtonGoal extends Goal {
     private final CopperGolemEntity entity;
-    public float lastTick = 0;
+    private int ticks = 0;
 
     public PressButtonGoal(CopperGolemEntity entity) {
         this.entity = entity;
     }
 
     @Override
-    public boolean canStart() { return this.entity.getBlockTarget() != null && this.entity.getRandom().nextFloat() > 0.6f; }
+    public boolean canStart() { return this.entity.getBlockTarget() != null && this.entity.getRandom().nextFloat() < 0.01f; }
 
-    public boolean shouldContinue() { return this.entity.getBlockTarget() != null; }
+    @Override
+    public boolean shouldContinue() {
+        return this.entity.getBlockTarget() != null;
+    }
 
     public void start() {
         var target = this.entity.getBlockTarget();
@@ -30,12 +33,14 @@ public class PressButtonGoal extends Goal {
     }
 
     public void tick() {
-        if (this.lastTick > 0) {
-            --this.lastTick;
+        this.ticks++;
+        if (this.ticks > 40 && !entity.getNavigation().isFollowingPath()) {
+            entity.clearBlockTarget();
+            return;
         }
 
         var target = entity.getBlockTarget();
-        if (target == null || !canClickTarget(target) || lastTick >= 20)
+        if (target == null || !canClickTarget(target))
             return;
 
         try {
@@ -50,10 +55,10 @@ public class PressButtonGoal extends Goal {
                 this.entity.setBendOverTicks(-10); // bend backwards
             }
             button.onUse(state, entity.world, target, null, Hand.MAIN_HAND, null);
-            this.lastTick = 20 * 5;
             this.entity.setButtonTicksLeft(10); // 10 = 1 rotation, as max deviation is set to 10 in model logic
 
             entity.clearBlockTarget();
+            ticks++;
         }
         catch (Exception e) {
             ModInit.LOGGER.error("Failed to press targeted button", e);
