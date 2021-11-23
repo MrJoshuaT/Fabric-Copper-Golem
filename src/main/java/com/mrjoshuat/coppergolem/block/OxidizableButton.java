@@ -4,12 +4,15 @@ import com.google.common.base.Suppliers;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.mrjoshuat.coppergolem.ModInit;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Degradable;
+import net.minecraft.block.Oxidizable;
 
 import java.util.Optional;
 import java.util.function.Supplier;
 
-public interface OxidizableButton extends Degradable<Oxidizable.OxidizationLevel> {
+public interface OxidizableButton extends Degradable<Oxidizable.OxidationLevel> {
     Supplier<BiMap<Block, Block>> BUTTON_OXIDATION_LEVEL_INCREASES = Suppliers.memoize(() -> {
         BiMap<Block, Block> map = HashBiMap.create();
         map.put(ModInit.COPPER_BUTTON, ModInit.EXPOSED_COPPER_BUTTON);
@@ -56,6 +59,6 @@ public interface OxidizableButton extends Degradable<Oxidizable.OxidizationLevel
     }
 
     default float getDegradationChanceMultiplier() {
-        return this.getDegradationLevel() == Oxidizable.OxidizationLevel.UNAFFECTED ? 0.75F : 1.0F;
+        return this.getDegradationLevel() == Oxidizable.OxidationLevel.UNAFFECTED ? 0.75F : 1.0F;
     }
 }
