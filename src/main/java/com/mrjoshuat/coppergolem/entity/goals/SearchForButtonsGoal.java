@@ -1,4 +1,4 @@
-package com.mrjoshuat.coppergolem.entity.target;
+package com.mrjoshuat.coppergolem.entity.goals;
 
 import com.mrjoshuat.coppergolem.entity.CopperGolemEntity;
 
@@ -21,7 +21,7 @@ public class SearchForButtonsGoal extends Goal {
 
     @Override
     public boolean canStart() {
-        return this.entity.getBlockTarget() == null && this.entity.getRandom().nextFloat() < 0.1f;
+        return this.entity.getBlockTarget() == null; // && this.entity.getRandom().nextFloat() < 0.1f;
     }
 
     @Override

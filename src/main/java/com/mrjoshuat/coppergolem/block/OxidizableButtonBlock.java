@@ -15,9 +15,9 @@ import net.minecraft.world.World;
 import java.util.Random;
 
 public class OxidizableButtonBlock extends AbstractButtonBlock implements OxidizableButton {
-    private final Oxidizable.OxidizationLevel oxidizationLevel;
+    private final Oxidizable.OxidationLevel oxidizationLevel;
 
-    public OxidizableButtonBlock(Oxidizable.OxidizationLevel oxidizationLevel, AbstractBlock.Settings settings) {
+    public OxidizableButtonBlock(Oxidizable.OxidationLevel oxidizationLevel, AbstractBlock.Settings settings) {
         super(false, settings);
         this.oxidizationLevel = oxidizationLevel;
     }
@@ -31,7 +31,7 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
     }
 
     @Override
-    public Oxidizable.OxidizationLevel getDegradationLevel() {
+    public Oxidizable.OxidationLevel getDegradationLevel() {
         return this.oxidizationLevel;
     }
 
@@ -61,7 +61,7 @@ public class OxidizableButtonBlock extends AbstractButtonBlock implements Oxidiz
         world.spawnEntity(itemEntity);
     }
 
-    public static int getRedstonePower(Oxidizable.OxidizationLevel level) {
+    public static int getRedstonePower(Oxidizable.OxidationLevel level) {
         return 15 - (3 * switch (level) {
             case UNAFFECTED -> 0;
             case EXPOSED -> 1;

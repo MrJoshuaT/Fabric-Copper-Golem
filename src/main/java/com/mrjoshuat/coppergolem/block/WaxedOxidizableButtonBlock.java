@@ -14,9 +14,9 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 public class WaxedOxidizableButtonBlock extends AbstractButtonBlock {
-    private Oxidizable.OxidizationLevel level;
+    private Oxidizable.OxidationLevel level;
 
-    public WaxedOxidizableButtonBlock(Oxidizable.OxidizationLevel level, Settings settings) {
+    public WaxedOxidizableButtonBlock(Oxidizable.OxidationLevel level, Settings settings) {
         super(false, settings);
         this.level = level;
     }

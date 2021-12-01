@@ -5,7 +5,7 @@ import com.mrjoshuat.coppergolem.entity.goals.EscapeWaterGoal;
 import com.mrjoshuat.coppergolem.entity.goals.PressButtonGoal;
 import com.mrjoshuat.coppergolem.entity.goals.RodWiggleGoal;
 import com.mrjoshuat.coppergolem.entity.goals.SpinHeadGoal;
-import com.mrjoshuat.coppergolem.entity.target.SearchForButtonsGoal;
+import com.mrjoshuat.coppergolem.entity.goals.SearchForButtonsGoal;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ItemEntity;
