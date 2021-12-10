@@ -8,7 +8,7 @@
     "OxidizableBlockMixin",
     "AxeItemMixin",
     "HoneycombItemMixin"
-  ]
+  ],
   "injectors": {
     "defaultRequire": 1
   }
