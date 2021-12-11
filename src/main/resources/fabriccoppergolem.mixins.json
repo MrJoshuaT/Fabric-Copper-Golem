@@ -4,8 +4,6 @@
   "package": "com.mrjoshuat.coppergolem.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-  ],
-  "client": [
     "BlockMixin",
     "OxidizableBlockMixin",
     "AxeItemMixin",

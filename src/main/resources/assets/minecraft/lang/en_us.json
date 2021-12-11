@@ -1,6 +1,7 @@
 {
     "item.minecraft.copper_golem_spawn_egg": "Copper Golem Spawn Egg",
     "block.minecraft.copper_button": "Copper Button",
+    "entity.minecraft.copper_golem": "Copper Golem",
     "block.minecraft.exposed_copper_button": "Exposed Copper Button",
     "block.minecraft.weathered_copper_button": "Weathered Copper Button",
     "block.minecraft.oxidized_copper_button": "Oxidized Copper Button",
