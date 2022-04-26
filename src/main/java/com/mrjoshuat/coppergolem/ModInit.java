@@ -9,7 +9,6 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
-import net.fabricmc.fabric.api.tool.attribute.v1.FabricToolTags;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.Material;
@@ -82,7 +81,6 @@ public class ModInit implements ModInitializer {
 		return FabricBlockSettings.of(Material.DECORATION)
 			.noCollision()
 			.requiresTool()
-			.breakByTool(FabricToolTags.PICKAXES)
 			.sounds(BlockSoundGroup.COPPER)
 			.strength(buttonStrengthBase - (buttonStrengthBase * (val * 0.1f)));
 	}
