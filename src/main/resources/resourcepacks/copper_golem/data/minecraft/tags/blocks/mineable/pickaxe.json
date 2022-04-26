@@ -1,0 +1,13 @@
+{
+  "replace": false,
+  "values": [
+    "minecraft:copper_button",
+    "minecraft:exposed_copper_button",
+    "minecraft:weathered_copper_button",
+    "minecraft:oxidized_copper_button",
+    "minecraft:waxed_copper_button",
+    "minecraft:waxed_exposed_copper_button",
+    "minecraft:waxed_weathered_copper_button",
+    "minecraft:waxed_oxidized_copper_button"
+  ]
+}
