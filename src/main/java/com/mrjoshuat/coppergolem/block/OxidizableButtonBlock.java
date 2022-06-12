@@ -11,8 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
-
-import java.util.Random;
+import net.minecraft.util.math.random.Random;
 
 public class OxidizableButtonBlock extends AbstractButtonBlock implements OxidizableButton {
     private final Oxidizable.OxidationLevel oxidizationLevel;
